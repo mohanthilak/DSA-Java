@@ -8,6 +8,44 @@ public class Helpers {
         return RandomNumber;
     }
 
+    public static int[] CreateSortedArray(int length) {
+        int[] arr = CreateIntArrayWithoutDuplicates(length);
+        SortArray(arr);
+        return arr;
+    }
+
+    public static int[] createRotatedArray(int length, int timesOfRotation) {
+        int[] arr = CreateIntArrayWithoutDuplicates(length);
+        SortArray(arr);
+        arr = RotateArray(arr, timesOfRotation);
+        return arr;
+    }
+
+    public static int[] RotateArray(int[] arr, int times){
+        int[] temp = new int[arr.length];
+        int k = 0;
+        // int timeCopy = times;
+        while(times>0){
+            temp[k] = arr[arr.length-times];
+            times--;
+            k++;
+        }
+        for(int i=0; i<arr.length-k; i++){
+            temp[i+k] = arr[i];
+        }
+        return temp;
+    }
+    // BubbleSort
+    public static void SortArray(int[] arr){
+        for(int i=0; i<arr.length-1; i++){
+            for(int j=0; j<arr.length-i-1; j++){
+                if(arr[j] > arr[j+1]) {
+                    swapElementsOfAnArray(arr, j, j+1);
+                }
+            }
+        }
+    }
+
     public static int[] CreateIntArrayWithoutDuplicates(int length) {
         List<Integer> arrList = new ArrayList<>();
         
