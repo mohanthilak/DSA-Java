@@ -106,6 +106,66 @@ public class CustomeLinkedList<T>{
         tail.next = null;
     }
 
+    public Node<T> reverseIterative(){
+        return reverseIterativeHelper(head);
+    }
+
+    public Node<T> reverseIterativeHelper(Node<T> node){
+        if(node == null) return null;
+        Node prev = null;
+        Node current = node;
+        Node next = current.next;
+        while(current != null){
+            current.next = prev;
+            prev = current;
+            current = next;
+            if(next != null) next = next.next;
+        }
+        return prev;
+    }
+
+    public void ReverseSublist(int left, int right){
+        if(left<0 || left>=size || left>=right || right>size) return;
+        
+        if(left == 1 && right == size){
+            reverse();
+            return;
+        }
+
+        Node nodeBeforeSublist = null;
+        Node current = head;
+
+        //Loop until current points to the start of sublist
+        for(int i=0; i<left-1; i++){
+            nodeBeforeSublist = current;
+            current = current.next;
+        }
+
+        Node newEndOfSublist = current;
+
+        //for reversing the sublist
+        Node leftNode = null;
+        Node next = current.next;
+
+        for(int i=0; i<right-left+1; i++){
+            current.next = leftNode;
+            leftNode = current;
+            current = next;
+            if(next != null){
+                next = next.next;
+            }
+        }
+
+        //The current node is either null or the Node after the sublist
+        if(left == 1){
+            head = leftNode;
+        }else{
+            nodeBeforeSublist.next = leftNode;
+        }
+        newEndOfSublist.next = current;
+        if(right == size) tail = newEndOfSublist;
+    }
+
     public void BubbleSort(){
         BubbleSortHelper(size-1, 0);
     }
@@ -140,6 +200,51 @@ public class CustomeLinkedList<T>{
         }
     }
 
+    public boolean CheckPalindrome(){
+        Node<T> middleNode = MiddleNode();
+        Node<T> secondHead = reverseIterativeHelper(middleNode);
+        Node<T> duplicatSecondHead = secondHead;
+        Node<T> tempHead = head;
+        while(tempHead != null && secondHead != null){
+            if(tempHead.val != secondHead.val) break;
+            tempHead = tempHead.next;
+            secondHead = secondHead.next;
+        }
+        reverseIterativeHelper(duplicatSecondHead);
+        return tempHead == null || secondHead == null;
+    }
+
+    public void ReOrder(){
+        Node<T> midNode = MiddleNode();
+        System.out.println(midNode);
+        Node<T> hs = reverseIterativeHelper(midNode);
+        System.out.println(hs);
+        Node<T> hf = head;
+        while(hf !=null && hs != null){
+            System.out.println(">" + head);
+            Node<T> temp = hf.next;
+            hf.next = hs;
+            hf = temp;
+
+            temp = hs.next;
+            hs.next = hf;
+            hs = temp;
+        }
+        if(hf != null){
+            hf.next = null;
+        }
+    }
+    
+    public Node<T> MiddleNode() {
+        Node<T> s = head;
+        Node<T> f = head;
+        while(f != null && f.next != null){
+            s = s.next;
+            f = f.next.next;
+        }
+        return s;
+    }
+
     public Node<T> Get(int pos){
         if(pos >= size || pos < 0) return null;
 
@@ -162,8 +267,6 @@ public class CustomeLinkedList<T>{
         LL += "END";
         return LL;
     }
-
-
 }
 
 class Node<T> {
